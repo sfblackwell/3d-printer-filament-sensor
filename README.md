@@ -1,4 +1,4 @@
-# Filament Humidity Sensor
+# 3d Printer Filament Humidity Sensor
 
 ## Yet another 3d printer filament humidity sensor using a Pimoroni Badger W with a BME280 sensor.
 
