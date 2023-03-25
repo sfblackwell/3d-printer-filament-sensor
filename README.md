@@ -20,7 +20,7 @@
   
 The [netmanClass.py](https://github.com/sfblackwell/3d-printer-filament-sensor/blob/e0c5dca9e58f53612bed2ad16eb20dea8897b15f/python-code/lib/netmanClass.py) contains a simple WiFI connection class and methods for reading power source and levels. They are contained within the Wifi class as power source and power levels use some common GPIO functions. 
 
-The code contains a lot of DEBUG print statments to REPL that can be enabled / disabled at start of code
+The code contains a lot of DEBUG print statments to REPL that can be enabled / disabled at start of code.
 
 ### *** This is a work in progress ***
 
