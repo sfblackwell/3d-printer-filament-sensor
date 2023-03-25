@@ -1,0 +1,11 @@
+{
+"sendSQL": "yes",
+"sendEmail": "yes",
+"minHumidity": 20,
+"maxHumidity": 40,
+"sqlDataAddr" : "http://192.168.1.222/filamentSensor.php"
+"waitTime": 1800,
+"fullBattery": 4.0,
+"emptyBattery": 2.5
+"changeBattery": 3.0
+}
