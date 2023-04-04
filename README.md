@@ -39,6 +39,6 @@ A picture:
 
 ![20230320_085055608_iOS](https://user-images.githubusercontent.com/122044826/227652855-81abf171-3f7c-4957-a381-bec39fc60271.jpg)
 
-Graphing output on web, red is out of bound alert:
+Graphing output on web, red is out of bounds alert:
 
 ![Screenshot 2023-03-24 225020](https://user-images.githubusercontent.com/122044826/227657046-52d38811-8f88-43d0-a58e-491e571438a6.jpg)
