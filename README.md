@@ -35,6 +35,8 @@ The code contains a lot of DEBUG print statments to REPL that can be enabled / d
 ](https://github.com/pimoroni/pimoroni-pico/releases/download/v1.19.16/pimoroni-badger2040w-v1.19.16-micropython-with-examples.uf2)
 - Case [Badger2040 Enclosure 3d Printed Case ](https://www.printables.com/model/145686-badger2040-enclosure/comments)
 - Graphing [Apex Charts with PHP and Javascript](https://apexcharts.com/)
+- Micropython eMail Alerts [umail](https://github.com/shawwwn/uMail) class by https://github.com/shawwwn
+
 
 A picture: 
 
