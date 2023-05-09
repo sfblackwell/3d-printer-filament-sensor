@@ -120,8 +120,19 @@ if DEBUG:
 
 if DEBUG: print("===> Initialise BME280 sensor")
 
-BME280 = BreakoutBME280(i2c)
-
+try:
+    BME280 = BreakoutBME280(i2c)
+except:
+    if DEBUG: print("===> BreakoutBME280: breakout not found when initialising")
+    display.set_pen(15)
+    display.clear()
+    display.set_pen(0)
+    
+    display.text( "BreakoutBME280: breakout not found when initialising", HEADER_X, HEADER_X, WIDTH, TEXT_SIZE1 )
+    display.update()
+    
+    sys.exit("Cannot continue")
+    
 #	load parameters
 
 if DEBUG: print("===> Get parameters")
