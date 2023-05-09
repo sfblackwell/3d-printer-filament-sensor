@@ -2,6 +2,14 @@
 
 ## Yet another 3d printer filament humidity sensor using a Pimoroni Badger W with a BME280 sensor.
 
+Initial implementation using the Badger specific @Micropython UF2
+
+- Now using Badger RTC (badger_rtc = pcf85063a.PCF85063A(i2c)) to implement wake up
+  - implemented BadgerOS halt() rather than Pico machine.deepsleep
+    - hopefully will lower battery consumption when halted
+
+### Overview
+
 - Reads humidity and temperature based on parameters using the BME280
   - Currenty every 30 mins
 - Logs readings to MariaDB using a simple REST interface
@@ -16,7 +24,8 @@
   - Battery level and change warnings
   - uses the [umail](https://github.com/shawwwn/uMail) class by https://github.com/shawwwn
 - At end of run puts device in to deep power saving sleep until run
--   not yet using onboard RTC
+  - now using Badger RTC (badger_rtc = pcf85063a.PCF85063A(i2c)) to implement wake up
+-   implemented BadgerOS halt() rather than Pico machine.deepsleep
   
 The [netmanClass.py](https://github.com/sfblackwell/3d-printer-filament-sensor/blob/e0c5dca9e58f53612bed2ad16eb20dea8897b15f/python-code/lib/netmanClass.py) contains a simple WiFI connection class and methods for reading power source and levels. They are contained within the Wifi class as power source and power levels use some common GPIO functions. 
 
