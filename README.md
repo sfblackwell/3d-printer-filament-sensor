@@ -2,12 +2,13 @@
 
 ## Yet another 3d printer filament humidity sensor using a Pimoroni Badger W with a BME280 sensor.
 
-Initial implementation using the Badger specific @Micropython UF2
+This version uses the Badger specific @Micropython UF2
 
 - Now using Badger RTC (badger_rtc = pcf85063a.PCF85063A(i2c)) to implement wake up
-  - implemented BadgerOS halt() rather than Pico machine.deepsleep
-    - hopefully will lower battery consumption when halted
-
+  - Please excuse all the RTC debug messages
+  - Implemented BadgerOS halt() rather than Pico machine.deepsleep
+  - Hopefully this will lower battery consumption when halted
+- As always has a load of debug messages that can be toggled on or off
 ### Overview
 
 - Reads humidity and temperature based on parameters using the BME280
