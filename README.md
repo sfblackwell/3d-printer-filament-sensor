@@ -8,7 +8,7 @@
   - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#button-presses
   - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#real-time-clock
   - Hopefully this will lower battery consumption when halted
-  - Wake method (O = Other, B = Button, R = RTC timer trigger) is diplayed on top line along with WiFi (C = Connected) status  
+  - Wake method (O = Other, B = Button, R = RTC timer trigger) is displayed on top line along with WiFi (C = Connected) status  
 - As always has a load of debug messages that can be toggled on or off
 
 ### Overview
