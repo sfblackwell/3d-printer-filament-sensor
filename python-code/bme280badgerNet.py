@@ -1,7 +1,7 @@
-#	show messages etc
+#	show debug messages etc
 
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 #	show long messages such as http responses
 
@@ -10,13 +10,42 @@ DEBUG1 = False
 
 import badger2040
 import badger_os
+import time
 
 display = badger2040.Badger2040()
+
+#	determine wake up method and store
+
+wokenByRTC    = badger2040.woken_by_rtc() 
+wokenByButton = badger2040.woken_by_button()
+
+if wokenByRTC:
+    wake = "R"
+    flashes = 3
+elif wokenByButton:
+    wake = "B"
+    flashes = 5
+else:
+    wake = "O"
+    flashes = 1
+    
+if DEBUG: print("===> Wake method: ", wake)
+
+#	flash LED to show badger is alive & indicate wake method
+
+for light in range(0,flashes):
+    display.led(255)
+    time.sleep(.5)
+    display.led(0)
+    time.sleep(.5)
+
+#
+#	lets carry on
+#
 
 import network
 import machine
 import ntptime
-import time
 from breakout_bme280 import BreakoutBME280
 import umail
 import json
@@ -28,32 +57,6 @@ from pimoroni_i2c import PimoroniI2C
 import pcf85063a
 
 #	set up badger
-#
-#	flash LED to show badger is alive & code running
-
-for light in range(0,5):
-    display.led(255)
-    time.sleep(.25)
-    display.led(0)
-    time.sleep(.25)
-
-#	RTC delay calculator
-#
-#	caclulate delay in s/m/h from date
-#
-def nextAlarm(date, seconds):
-    
-    year, month, day, hour, minute, second, dow = date
-    
-    second += seconds
-    minute += second // 60
-    second %= 60
-    hour += minute // 60
-    minute %= 60
-    day += hour // 24
-    hour %= 24
-    
-    return second, minute, hour
 
 #	Display Setup
 #
@@ -105,6 +108,17 @@ display.set_thickness(fontThickness)
 WIDTH  = 296
 HEIGHT = 128
 
+#	display error messages
+
+def quickDisplay(quick, message):
+
+    quick.set_pen(15)
+    quick.clear()
+    quick.set_pen(0)
+    
+    quick.text(message, HEADER_X, HEADER_X, WIDTH, TEXT_SIZE1 )
+    quick.update()
+
 #	Scan the i2c bus for devices
 
 sdaPIN=machine.Pin(4)
@@ -123,14 +137,9 @@ if DEBUG: print("===> Initialise BME280 sensor")
 try:
     BME280 = BreakoutBME280(i2c)
 except:
-    if DEBUG: print("===> BreakoutBME280: breakout not found when initialising")
-    display.set_pen(15)
-    display.clear()
-    display.set_pen(0)
-    
-    display.text( "BreakoutBME280: breakout not found when initialising", HEADER_X, HEADER_X, WIDTH, TEXT_SIZE1 )
-    display.update()
-    
+    mess = "BreakoutBME280: breakout not found when initialising"
+    if DEBUG: print("===>", mess)
+    quickDisplay(display, mess)
     sys.exit("Cannot continue")
     
 #	load parameters
@@ -223,46 +232,24 @@ try:
     if WiFiConnected:
         if DEBUG: print("===> Setup Pico RTC & Badger RTC based on NTP time")
         
-        #	badger RTC is connected via i2c, then setup alarm and interupt settings
-        
-        i2c = PimoroniI2C(sda=4,scl=5)
-        badger_rtc = pcf85063a.PCF85063A(i2c)
-        
-        badger_rtc.clear_alarm_flag()
-        badger_rtc.enable_alarm_interrupt(True)
-        badger_rtc.enable_timer_interrupt(True)
-        
         #	set RTC's from  NTP
         
         pico_rtc = machine.RTC() 
         ntptime.settime()
-        badger_rtc.datetime(time.localtime())        
-        
-        uyear, umonth, uday, uhour, uminute, usecond, udow, udummy    = time.gmtime()
-        lyear, lmonth, lday, lhour, lminute, lsecond, ldow, ldummy    = time.localtime()        
-        byear, bmonth, bday, bhour, bminute, bsecond, bdow            = badger_rtc.datetime()
+        badger2040.pico_rtc_to_pcf()
+
         pyear, pmonth, pday, pdow,  phour,   pminute, psecond, pdummy = pico_rtc.datetime()
 
         timeString = "{:02}:{:02}:{:02} {:04}/{:02}/{:02}"
         
-        hmsymdUTC    = timeString.format(uhour, uminute, usecond, uyear, umonth, uday)
-        hmsymdLocal  = timeString.format(lhour, lminute, lsecond, lyear, lmonth, lday)
         hmsymdPico   = timeString.format(phour, pminute, psecond, pyear, pmonth, pday)
-        hmsymdBadger = timeString.format(bhour, bminute, bsecond, byear, bmonth, bday)
     
-        if DEBUG: print("===> UTC time:  "  , hmsymdUTC)
-        if DEBUG: print("===> Local time:  ", hmsymdLocal)
         if DEBUG: print("===> Pico Time:  " , hmsymdPico)
-        if DEBUG: print("===> Badger Time: ", hmsymdBadger)
-        
-        timeString1 = "{:02}:{:02}:{:02}"
-        alarm = nextAlarm(badger_rtc.datetime(), waitTime)
-        if DEBUG: print("===> Alarm set for: ", timeString1.format(alarm[2], alarm[1], alarm[0]))
-        badger_rtc.set_alarm(*alarm)       
-
+        if DEBUG: print("===> Alarm set for: {} plus {} mins".format(hmsymdPico,waitTime))
+   
         ipAddress = wifiConnection.ipAddressWiFi()
         updateMessage = updateMessage + "(" + ipAddress + ")"
-        onWiFi =" W"
+        onWiFi ="W"
         if DEBUG: print("===> WiFi Connected, returned IP address", ipAddress)
     else:
         onWiFi =""
@@ -300,7 +287,7 @@ try:
     display.clear()
     display.set_pen(0)
     
-    display.text( "{:.2f}V {:.0f}% {}{}".format(vSystemVolts, batteryPercentage, hms, onWiFi), HEADER_X, HEADER_X, WIDTH, TEXT_SIZE1 )
+    display.text( "{:.2f}V {:.0f}% {}{}".format(vSystemVolts, batteryPercentage, hms, (onWiFi+wake)), HEADER_X, HEADER_X, WIDTH, TEXT_SIZE1 )
   
     if DEBUG: print("===> Reading BME280")
     
@@ -455,7 +442,7 @@ if runError == False:
 #
 #	end of update block
 #
-# clean up and get ready for next run
+# 	clean up and get ready for next run
 #
 
 try:
@@ -476,5 +463,5 @@ if DEBUG: print("===> Waiting for next update")
 if DEBUG: print("=====================================================================")
 if DEBUG: print("Halted")
 if DEBUG: print("=====================================================================")
-display.halt()
+badger2040.sleep_for(waitTime)
     
