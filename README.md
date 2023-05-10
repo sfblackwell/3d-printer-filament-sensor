@@ -4,9 +4,9 @@
 
 This version uses the Badger specific @Micropython UF2
 
-- Now using Badger RTC (badger_rtc = pcf85063a.PCF85063A(i2c)) to implement wake up
-  - Please excuse all the RTC debug messages
-  - Implemented BadgerOS halt() rather than Pico machine.deepsleep
+- Now using the Badger OS functions to implement sleep & wake up
+  - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#button-presses
+  - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#real-time-clock
   - Hopefully this will lower battery consumption when halted
 - As always has a load of debug messages that can be toggled on or off
 ### Overview
