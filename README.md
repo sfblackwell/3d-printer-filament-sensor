@@ -1,13 +1,14 @@
-# 3d Printer Filament Humidity Sensor
+# Yet another 3d printer filament humidity sensor using a Pimoroni Badger W with a BME280 sensor.
 
-## Yet another 3d printer filament humidity sensor using a Pimoroni Badger W with a BME280 sensor.
+## This project is an educational tool, mainly for ME :)
 
-This version uses the Badger specific @Micropython UF2
+## This version uses the Badger specific @Micropython UF2
 
 - Now using the Badger OS functions to implement sleep & wake up
   - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#button-presses
   - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#real-time-clock
   - Hopefully this will lower battery consumption when halted
+  - Wake method (O = Other, B = Button, R = RTC timer trigger) is diplayed on top line along with WiFi (C = Connected) status  
 - As always has a load of debug messages that can be toggled on or off
 
 ### Overview
