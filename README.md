@@ -9,10 +9,12 @@ This version uses the Badger specific @Micropython UF2
   - https://github.com/pimoroni/badger2040/blob/main/docs/reference.md#real-time-clock
   - Hopefully this will lower battery consumption when halted
 - As always has a load of debug messages that can be toggled on or off
+
 ### Overview
 
 - Reads humidity and temperature based on parameters using the BME280
-  - Currenty every 30 mins
+  - Currenty every 30 mins 
+  - Most parameters are ajustable in paramters.json file 
 - Logs readings to MariaDB using a simple REST interface
   - Humidity
   - Temperature
@@ -24,9 +26,9 @@ This version uses the Badger specific @Micropython UF2
   - Out of bounds humidity readings 
   - Battery level and change warnings
   - uses the [umail](https://github.com/shawwwn/uMail) class by https://github.com/shawwwn
-- At end of run puts device in to deep power saving sleep until run
-  - now using Badger RTC (badger_rtc = pcf85063a.PCF85063A(i2c)) to implement wake up
--   implemented BadgerOS halt() rather than Pico machine.deepsleep
+- At end of run puts device in to deep power saving sleep until retriggered by button or the RTC
+  - now using Badger OS functions (pcf85063a) to implement RTC wake up
+-   Now implements badger2040.sleep_for(minutes) rather than Pico machine.deepsleep
   
 The [netmanClass.py](https://github.com/sfblackwell/3d-printer-filament-sensor/blob/e0c5dca9e58f53612bed2ad16eb20dea8897b15f/python-code/lib/netmanClass.py) contains a simple WiFI connection class and methods for reading power source and levels. They are contained within the Wifi class as power source and power levels use some common GPIO functions. 
 
@@ -44,7 +46,7 @@ The code contains a lot of DEBUG print statments to REPL that can be enabled / d
 - Micropython [pimoroni-badger2040w-v1.19.16-micropython-with-examples.uf2
 ](https://github.com/pimoroni/pimoroni-pico/releases/download/v1.19.16/pimoroni-badger2040w-v1.19.16-micropython-with-examples.uf2)
 - Case [Badger2040 Enclosure 3d Printed Case ](https://www.printables.com/model/145686-badger2040-enclosure/comments)
-- Graphing [Apex Charts with PHP and Javascript](https://apexcharts.com/)
+- Web HTML graphing [Apex Charts with PHP and Javascript](https://apexcharts.com/)
 - Micropython eMail Alerts [umail](https://github.com/shawwwn/uMail) class by https://github.com/shawwwn
 
 
